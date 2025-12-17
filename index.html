@@ -6,124 +6,215 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
-			/* CONFIGURACIÓN GENERAL */
-			body, #page-wrapper, #wrapper, .wrapper, #footer {
-				background-color: #000000 !important;
-				background-image: none !important;
-				color: #ffffff !important;
-			}
-
-			/* LOGO FLOTANTE - PUNTO 2 y 4 */
+			/* RESET Y FONDO */
+			body, html { margin: 0; padding: 0; background-color: #000 !important; color: #fff; }
+			
+			/* LOGO FLOTANTE - FIJO ABAJO DERECHA */
 			.floating-logo {
 				position: fixed;
 				bottom: 20px;
 				right: 20px;
-				width: 150px; /* Tamaño imponente */
+				width: 120px;
 				z-index: 9999;
-				pointer-events: none; /* Para que no estorbe al hacer clic */
 			}
 
-			/* VIDEO HERO - PUNTO 1 y 3 */
-			.video-overlay-text {
-				position: absolute;
-				left: 5%;
-				top: 50%;
-				transform: translateY(-50%);
-				z-index: 2;
-				width: 70%; 
+			/* SECCIÓN VIDEO - SI NO CARGA EL VIDEO, SE VERÁ NEGRO CON EL TEXTO */
+			#hero-header {
+				position: relative;
+				height: 100vh;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				overflow: hidden;
+				background: #000;
 			}
+
+			#hero-header video {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				min-width: 100%;
+				min-height: 100%;
+				width: auto;
+				height: auto;
+				z-index: 1;
+				transform: translate(-50%, -50%);
+				object-fit: cover;
+			}
+
+			.video-overlay-text {
+				position: relative;
+				z-index: 2;
+				padding-left: 5%;
+				width: 80%;
+			}
+
 			.video-overlay-text h2 {
 				color: #ff0000 !important;
-				font-size: 5.5rem; /* Letras muy grandes */
+				font-size: clamp(2.5rem, 7vw, 5.5rem);
 				line-height: 1;
 				font-weight: 900;
 				text-transform: uppercase;
-				margin-bottom: 10px;
+				margin: 0 0 15px 0;
 			}
+
 			.video-overlay-text p {
 				color: #ff0000 !important;
-				font-size: 1.5rem;
+				font-size: clamp(1rem, 2vw, 1.5rem);
 				font-weight: 600;
-				margin: 0;
+				text-transform: uppercase;
 			}
 
-			/* PRESENTACIÓN - PUNTO 1, 2 y 3 */
+			/* SECCIÓN ABOUT ME - CON IMAGEN DE FONDO */
 			.about-section {
 				position: relative;
-				min-height: 100vh;
-				display: flex;
-				align-items: center;
+				padding: 100px 0;
 				background: url('images/presentacion.jpg') no-repeat center center;
 				background-size: cover !important;
-				border-top: 4px solid #ff0000;
-			}
-			.about-content {
-				background: rgba(0,0,0,0.85);
-				padding: 50px;
-				max-width: 600px;
-				margin-left: 5%;
-			}
-			.about-content h2 {
-				color: #ffffff !important;
-				font-size: 4rem;
-				margin-bottom: 30px;
-				font-weight: 900;
+				min-height: 80vh;
+				display: flex;
+				align-items: center;
+				border-top: 5px solid #ff0000;
 			}
 
-			/* LÍNEA DESLIZANTE - PUNTO 5 */
-			.marquee-separator {
+			.about-content {
+				background: rgba(0,0,0,0.85);
+				padding: 40px;
+				margin-left: 5%;
+				max-width: 600px;
+				border-left: 5px solid #ff0000;
+			}
+
+			.about-content h2 {
+				color: #fff !important;
+				font-size: 3.5rem;
+				font-weight: 900;
+				margin-bottom: 20px;
+				letter-spacing: 2px; /* Evita que se encimen las letras */
+			}
+
+			/* LÍNEA DESLIZANTE */
+			.marquee-container {
 				background: #ff0000;
 				padding: 15px 0;
 				overflow: hidden;
 				white-space: nowrap;
 			}
+
 			.marquee-text {
 				display: inline-block;
-				animation: marquee 15s linear infinite;
+				animation: scroll-text 15s linear infinite;
 				font-weight: 900;
+				font-size: 1.5rem;
 				text-transform: uppercase;
-				font-size: 1.8rem;
 			}
-			@keyframes marquee {
+
+			@keyframes scroll-text {
 				from { transform: translateX(0); }
 				to { transform: translateX(-50%); }
 			}
 
-			/* CITA MARTIN VIDELA - PUNTO 5 y 6 */
+			/* CITA MARTIN VIDELA */
+			.quote-section {
+				padding: 120px 20px;
+				text-align: center;
+				background: #000;
+			}
+
 			.quote-section h2 {
-				font-size: 4.5rem;
+				font-size: clamp(2rem, 5vw, 4rem);
 				line-height: 1.1;
 				font-weight: 900;
 				text-transform: uppercase;
-				margin-bottom: 30px;
 			}
 
-			/* NOMBRE LATERAL - PUNTO 7 */
+			/* NOMBRE LATERAL GIGANTE */
 			.side-name {
 				color: #ff0000 !important;
-				font-size: 10rem;
+				font-size: clamp(4rem, 15vw, 10rem);
 				font-weight: 900;
 				line-height: 0.8;
 				text-transform: uppercase;
-				margin: 80px 0;
+				padding: 50px 5%;
 			}
 
-			/* AJUSTES PARA CELULAR (MOBILE) */
+			/* CONTACTO */
+			#footer-new {
+				padding: 80px 5%;
+				background: #000;
+				border-top: 1px solid #333;
+			}
+
+			.footer-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 40px;
+			}
+
 			@media screen and (max-width: 768px) {
-				.video-overlay-text { width: 90%; }
-				.video-overlay-text h2 { font-size: 2.5rem; }
-				.floating-logo { width: 80px; bottom: 10px; right: 10px; }
-				.about-content h2 { font-size: 2.5rem; }
-				.about-content { margin: 20px; padding: 30px; }
-				.quote-section h2 { font-size: 2rem; }
-				.side-name { font-size: 4rem; }
-				.col-6 { width: 100% !important; margin-bottom: 40px; }
+				.footer-grid { grid-template-columns: 1fr; }
+				.about-content { margin: 0 20px; }
+				.floating-logo { width: 80px; }
 			}
 		</style>
 	</head>
-	<body class="is-preload">
+	<body>
 
 		<img src="images/logo.png" class="floating-logo" alt="Logo">
 
-		<section id="hero-header" style="position: relative; height: 100vh; width: 100%; overflow: hidden;">
-			<video autoplay muted loop playsinline style="position: absolute; top: 50%; left:
+		<section id="hero-header">
+			<video autoplay muted loop playsinline>
+				<source src="images/fondo.mp4" type="video/mp4">
+			</video>
+			<div class="video-overlay-text">
+				<h2>Eyes on the goal,<br>mind disciplined,<br>no distractions.</h2>
+				<p>BENJAMIN GIMENEZ, RACE CAR DRIVER</p>
+			</div>
+		</section>
+
+		<section class="about-section">
+			<div class="about-content">
+				<h2>ABOUT ME</h2>
+				<p>My name is Benjamin Gimenez, a dedicated and ambitious race car driver. At 15 years old, I pursue my dream of becoming a professional driver with passion, sacrifice, and hard work. Every training session represents a new stage in this demanding journey, where I constantly push my limits and achieve my personal goals.</p>
+			</div>
+		</section>
+
+		<div class="marquee-container">
+			<div class="marquee-text">
+				BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • 
+			</div>
+		</div>
+
+		<section class="quote-section">
+			<h2>"OF ALL THOSE<br>WHO CAME,<br>HE IS THE ONE WHO<br>STANDS OUT THE MOST"</h2>
+			<p style="margin-top:30px;">
+				<a href="https://instagram.com/mvracingteam" target="_blank" style="color:#fff; font-size: 1.2rem; text-decoration: underline;">
+					Martin Videla - MV Racing Team
+				</a>
+			</p>
+		</section>
+
+		<div class="side-name">
+			BENJAMIN<br>GIMENEZ
+		</div>
+
+		<footer id="footer-new">
+			<div class="footer-grid">
+				<div>
+					<h3 style="color:#ff0000; font-weight:900;">FOLLOW ME</h3>
+					<p><a href="#">Instagram</a></p>
+					<p><a href="#">TikTok</a></p>
+					<p><a href="#">Facebook</a></p>
+					<p><a href="#">YouTube</a></p>
+				</div>
+				<div>
+					<h3 style="color:#ff0000; font-weight:900;">CONTACT ME</h3>
+					<p>Email: benjamingimenez@ejemplo.com</p>
+					<p>Phone: +XX XXX XXXXXXX</p>
+				</div>
+			</div>
+		</footer>
+
+	</body>
+</html>
