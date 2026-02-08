@@ -7,20 +7,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
-			/* RESET Y CONFIGURACIÓN GENERAL */
-			body, html { 
-				margin: 0; 
-				padding: 0; 
-				background-color: #000 !important; 
-				color: #fff; 
-				overflow-x: hidden; 
-				scroll-behavior: smooth; /* ESTO HACE LA MAGIA DEL DESLIZAMIENTO SUAVE */
-			}
+			/* --- ESTILOS GENERALES --- */
+			body, html { margin: 0; padding: 0; background-color: #000 !important; color: #fff; overflow-x: hidden; }
 			
 			/* LOGO FLOTANTE */
 			.floating-logo { position: fixed; bottom: 20px; right: 20px; width: 120px; z-index: 9999; }
 
-			/* HERO VIDEO - TEXTO GIGANTE */
+			/* --- PÁGINA PRINCIPAL (HOME) --- */
 			#hero-header {
 				position: relative; height: 100vh; width: 100%;
 				display: flex; align-items: center; overflow: hidden; background: #000;
@@ -42,7 +35,7 @@
 				font-weight: 600; margin-top: 15px; text-transform: uppercase;
 			}
 
-			/* SECCIÓN ABOUT ME */
+			/* ABOUT ME */
 			.about-section {
 				position: relative; padding: 100px 0;
 				background: url('images/presentacion.jpg') no-repeat center center;
@@ -56,15 +49,15 @@
 			}
 			.about-content h2 { color: #fff !important; font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; }
 			
-			/* BOTÓN READ MORE */
-			.btn-more {
-				display: inline-block; margin-top: 20px;
-				padding: 10px 30px; border: 2px solid #ff0000;
+			/* BOTONES ROJOS */
+			.btn-red {
+				display: inline-block; margin-top: 20px; cursor: pointer;
+				padding: 15px 40px; border: 2px solid #ff0000; background: transparent;
 				color: #fff !important; text-decoration: none;
-				font-weight: 900; text-transform: uppercase;
+				font-weight: 900; text-transform: uppercase; font-size: 1rem;
 				transition: all 0.3s ease;
 			}
-			.btn-more:hover { background: #ff0000; color: #000 !important; }
+			.btn-red:hover { background: #ff0000; color: #000 !important; }
 
 			/* LÍNEA DESLIZANTE */
 			.marquee-container {
@@ -90,21 +83,24 @@
 			.tiktok-card iframe { width: 100%; height: 580px; border-radius: 8px; }
 			.watch-link { display: block; margin-top: 15px; color: #ff0000 !important; font-weight: 900; text-decoration: none; font-size: 0.9rem; }
 
-			/* NUEVA SECCIÓN: TRAYECTORIA (BIOGRAPHY) */
-			#biography {
-				padding: 100px 5%; background: #0a0a0a; border-top: 1px solid #222;
+			/* --- PÁGINA OCULTA (BIOGRAFÍA) --- */
+			#full-bio-page {
+				display: none; /* Por defecto está oculto */
+				background-color: #000;
+				min-height: 100vh;
+				padding: 50px 5%;
+				animation: fadeIn 0.5s ease-in-out;
 			}
-			.bio-container { max-width: 1000px; margin: 0 auto; }
-			.bio-title { font-size: 3rem; color: #ff0000 !important; font-weight: 900; margin-bottom: 40px; text-transform: uppercase; }
-			.bio-text { font-size: 1.2rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; }
-			.bio-highlight { color: #fff; font-weight: bold; border-left: 3px solid #ff0000; padding-left: 15px; margin: 20px 0; }
+			@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+			
+			.bio-header { font-size: 4rem; color: #ff0000; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #333; margin-bottom: 40px; }
+			.bio-subtitle { font-size: 1.5rem; color: #fff; font-weight: bold; margin-top: 40px; margin-bottom: 10px; border-left: 4px solid #ff0000; padding-left: 15px; }
+			.bio-paragraph { font-size: 1.1rem; color: #ccc; line-height: 1.8; margin-bottom: 20px; max-width: 800px; }
 
-			/* CITA Y NOMBRE */
+			/* RESTO */
 			.quote-section { padding: 120px 20px; text-align: center; background: #000; }
 			.quote-section h2 { color: #fff !important; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.1; font-weight: 900; text-transform: uppercase; }
 			.side-name { color: #ff0000 !important; font-size: clamp(4rem, 15vw, 10rem); font-weight: 900; line-height: 0.8; text-transform: uppercase; padding: 50px 5%; }
-
-			/* FOOTER */
 			#footer-new { padding: 80px 5%; background: #000; border-top: 1px solid #333; }
 			.footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
@@ -112,6 +108,7 @@
 				.footer-grid { grid-template-columns: 1fr; }
 				.about-content { margin: 0 20px; }
 				.floating-logo { width: 80px; }
+				.bio-header { font-size: 2.5rem; }
 			}
 		</style>
 	</head>
@@ -119,116 +116,138 @@
 
 		<img src="images/logo.png" class="floating-logo" alt="Logo">
 
-		<section id="hero-header">
-			<video autoplay muted loop playsinline>
-				<source src="images/fondo.mp4" type="video/mp4">
-			</video>
-			<div class="video-overlay-text">
-				<h2>Eyes on<br>the goal,<br>mind<br>disciplined.</h2>
-				<p>BENJAMIN GIMENEZ • RACE CAR DRIVER</p>
-			</div>
-		</section>
+		<div id="main-content">
 
-		<section class="about-section">
-			<div class="about-content">
-				<h2>ABOUT ME</h2>
-				<p>My name is Benjamin Gimenez, a dedicated and ambitious race car driver. At 15 years old, I pursue my dream of becoming a professional driver with passion, sacrifice, and hard work.</p>
-				<a href="#biography" class="btn-more">READ MORE</a>
-			</div>
-		</section>
+			<section id="hero-header">
+				<video autoplay muted loop playsinline>
+					<source src="images/fondo.mp4" type="video/mp4">
+				</video>
+				<div class="video-overlay-text">
+					<h2>Eyes on<br>the goal,<br>mind<br>disciplined.</h2>
+					<p>BENJAMIN GIMENEZ • RACE CAR DRIVER</p>
+				</div>
+			</section>
 
-		<div class="marquee-container">
-			<div class="marquee-text">
-				BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • 
+			<section class="about-section">
+				<div class="about-content">
+					<h2>ABOUT ME</h2>
+					<p>My name is Benjamin Gimenez, a dedicated and ambitious race car driver. At 15 years old, I pursue my dream of becoming a professional driver with passion, sacrifice, and hard work.</p>
+					<div onclick="openBio()" class="btn-red">READ MORE</div>
+				</div>
+			</section>
+
+			<div class="marquee-container">
+				<div class="marquee-text">
+					BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • BENJAMIN GIMENEZ • 
+				</div>
+			</div>
+
+			<section class="video-section">
+				<h2 style="color: #ff0000 !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">LATEST ACTION</h2>
+				<div class="video-slider">
+					
+					<div class="tiktok-card">
+						<iframe src="https://www.tiktok.com/embed/7604180174090898696" frameborder="0" allowfullscreen></iframe>
+						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7604180174090898696" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
+					</div>
+					<div class="tiktok-card">
+						<iframe src="https://www.tiktok.com/embed/7603053008015887634" frameborder="0" allowfullscreen></iframe>
+						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7603053008015887634" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
+					</div>
+					<div class="tiktok-card">
+						<iframe src="https://www.tiktok.com/embed/7601920673308478727" frameborder="0" allowfullscreen></iframe>
+						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7601920673308478727" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
+					</div>
+					<div class="tiktok-card">
+						<iframe src="https://www.tiktok.com/embed/7597963033742249272" frameborder="0" allowfullscreen></iframe>
+						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7597963033742249272" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
+					</div>
+
+					<div class="tiktok-card">
+						<iframe src="https://www.tiktok.com/embed/7593036796968144136" frameborder="0" allowfullscreen></iframe>
+						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7593036796968144136" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
+					</div>
+					<div class="tiktok-card">
+						<iframe src="https://www.tiktok.com/embed/7584169669569924370" frameborder="0" allowfullscreen></iframe>
+						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7584169669569924370" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="quote-section">
+				<h2>"OF ALL THOSE<br>WHO CAME,<br>HE IS THE ONE WHO<br>STANDS OUT THE MOST."</h2>
+				<p style="margin-top:30px;">
+					<a href="https://www.instagram.com/mv_kartracing/" target="_blank" style="color:#ffffff; font-size: 1.2rem; text-decoration: underline;">
+						Martin Videla - MV Kart Racing
+					</a>
+				</p>
+			</section>
+
+			<div class="side-name">BENJAMIN<br>GIMENEZ</div>
+
+			<footer id="footer-new">
+				<div class="footer-grid">
+					<div>
+						<h3 style="color:#ff0000; font-weight:900;">FOLLOW ME</h3>
+						<p><a href="https://www.instagram.com/ben.gimenez_ap/">Instagram</a></p>
+						<p><a href="https://www.tiktok.com/@ben.gimenez_ap">TikTok</a></p>
+						<p><a href="https://www.facebook.com/profile.php?id=61585290110281">Facebook</a></p>
+						<p><a href="https://www.youtube.com/@ben.gimenez">YouTube</a></p>
+					</div>
+					<div>
+						<h3 style="color:#ff0000; font-weight:900;">CONTACT ME</h3>
+						<p>Email: ben.gimenez.contact@gmail.com</p>
+						<p>Phone: +54 11 21862872</p>
+					</div>
+				</div>
+				<div style="text-align: right; margin-top: 50px; font-size: 0.7rem; opacity: 0.5;">
+					MADE WITH HELP ON <span style="color:#4285F4">G</span><span style="color:#EA4335">E</span><span style="color:#FBBC05">M</span><span style="color:#4285F4">I</span><span style="color:#34A853">N</span><span style="color:#EA4335">I</span>
+				</div>
+			</footer>
+		</div>
+
+		<div id="full-bio-page">
+			<div class="container">
+				<h1 class="bio-header">FULL BIOGRAPHY</h1>
+				
+				<div class="bio-subtitle">THE BEGINNING</div>
+				<p class="bio-paragraph">
+					My passion for motorsport started at a young age. What began as a hobby quickly turned into a professional pursuit. Driving isn't just about speed for me; it's about discipline, precision, and the constant drive to improve lap after lap.
+				</p>
+
+				<div class="bio-subtitle">CURRENT CAREER: APAK</div>
+				<p class="bio-paragraph">
+					Currently, I am competing in the <strong>APAK category</strong>. This championship is a crucial testing ground where I am honing my race craft, learning to manage tire wear, and developing defensive and offensive driving techniques.
+				</p>
+
+				<div class="bio-subtitle">THE FUTURE: 2027</div>
+				<p class="bio-paragraph">
+					My eyes are set on the <strong>Super A Category for the 2027 season</strong>. This is the next major step in my career, and my training regimen—both physical and on the simulator—is fully focused on being ready for that challenge.
+				</p>
+
+				<div onclick="closeBio()" class="btn-red" style="margin-top: 50px;">BACK TO HOME</div>
 			</div>
 		</div>
 
-		<section class="video-section">
-			<h2 style="color: #ff0000 !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">LATEST ACTION</h2>
-			<div class="video-slider">
-				
-				<div class="tiktok-card">
-					<iframe src="https://www.tiktok.com/embed/7604180174090898696" frameborder="0" allowfullscreen></iframe>
-					<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7604180174090898696" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
-				</div>
-				<div class="tiktok-card">
-					<iframe src="https://www.tiktok.com/embed/7603053008015887634" frameborder="0" allowfullscreen></iframe>
-					<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7603053008015887634" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
-				</div>
-				<div class="tiktok-card">
-					<iframe src="https://www.tiktok.com/embed/7601920673308478727" frameborder="0" allowfullscreen></iframe>
-					<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7601920673308478727" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
-				</div>
-				<div class="tiktok-card">
-					<iframe src="https://www.tiktok.com/embed/7597963033742249272" frameborder="0" allowfullscreen></iframe>
-					<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7597963033742249272" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
-				</div>
+		<script>
+			function openBio() {
+				// Oculta la página principal
+				document.getElementById('main-content').style.display = 'none';
+				// Muestra la biografía
+				document.getElementById('full-bio-page').style.display = 'block';
+				// Sube al inicio de la página
+				window.scrollTo(0, 0);
+			}
 
-				<div class="tiktok-card">
-					<iframe src="https://www.tiktok.com/embed/7593036796968144136" frameborder="0" allowfullscreen></iframe>
-					<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7593036796968144136" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
-				</div>
-				<div class="tiktok-card">
-					<iframe src="https://www.tiktok.com/embed/7584169669569924370" frameborder="0" allowfullscreen></iframe>
-					<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7584169669569924370" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
-				</div>
-			</div>
-		</section>
-
-		<section id="biography">
-			<div class="bio-container">
-				<h2 class="bio-title">CAREER PATH</h2>
-				
-				<p class="bio-text">
-					My journey in motorsport began with a clear goal: to reach the top. Currently competing in the <strong>APAK category</strong>, I focus my daily routine on physical training, simulator practice, and mechanical understanding of the kart.
-				</p>
-				
-				<div class="bio-highlight">
-					<h3>CURRENT STATUS</h3>
-					<p>Competitor in APAK Karting. Developing skills in overtaking, defensive driving, and wet track adaptability.</p>
-				</div>
-
-				<div class="bio-highlight">
-					<h3>FUTURE GOALS</h3>
-					<p>Preparing for the jump to the <strong>Super A category in 2027</strong>. The road is long, but my commitment is absolute.</p>
-				</div>
-				
-				<p class="bio-text">
-					"Speed is not just about going fast, it's about finding the limit and living there."
-				</p>
-			</div>
-		</section>
-
-		<section class="quote-section">
-			<h2>"OF ALL THOSE<br>WHO CAME,<br>HE IS THE ONE WHO<br>STANDS OUT THE MOST."</h2>
-			<p style="margin-top:30px;">
-				<a href="https://www.instagram.com/mv_kartracing/" target="_blank" style="color:#ffffff; font-size: 1.2rem; text-decoration: underline;">
-					Martin Videla - MV Kart Racing
-				</a>
-			</p>
-		</section>
-
-		<div class="side-name">BENJAMIN<br>GIMENEZ</div>
-
-		<footer id="footer-new">
-			<div class="footer-grid">
-				<div>
-					<h3 style="color:#ff0000; font-weight:900;">FOLLOW ME</h3>
-					<p><a href="https://www.instagram.com/ben.gimenez_ap/">Instagram</a></p>
-					<p><a href="https://www.tiktok.com/@ben.gimenez_ap">TikTok</a></p>
-					<p><a href="https://www.facebook.com/profile.php?id=61585290110281">Facebook</a></p>
-					<p><a href="https://www.youtube.com/@ben.gimenez">YouTube</a></p>
-				</div>
-				<div>
-					<h3 style="color:#ff0000; font-weight:900;">CONTACT ME</h3>
-					<p>Email: ben.gimenez.contact@gmail.com</p>
-					<p>Phone: +54 11 21862872</p>
-				</div>
-			</div>
-			<div style="text-align: right; margin-top: 50px; font-size: 0.7rem; opacity: 0.5;">
-				MADE WITH HELP ON <span style="color:#4285F4">G</span><span style="color:#EA4335">E</span><span style="color:#FBBC05">M</span><span style="color:#4285F4">I</span><span style="color:#34A853">N</span><span style="color:#EA4335">I</span>
-			</div>
-		</footer>
+			function closeBio() {
+				// Oculta la biografía
+				document.getElementById('full-bio-page').style.display = 'none';
+				// Muestra la página principal
+				document.getElementById('main-content').style.display = 'block';
+				// Sube al inicio
+				window.scrollTo(0, 0);
+			}
+		</script>
 
 	</body>
 </html>
