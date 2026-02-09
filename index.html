@@ -8,10 +8,9 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
 			/* =========================================
-			   VARIABLES DE COLORES (Aquí ocurre la magia del Tema)
+			   VARIABLES DE COLORES
 			   ========================================= */
 			:root {
-				/* TEMA OSCURO (Por defecto) */
 				--bg-color: #000000;
 				--text-color: #ffffff;
 				--accent-color: #ff0000;
@@ -21,11 +20,10 @@
 				--btn-hover-text: #000000;
 			}
 
-			/* TEMA CLARO (Se activa con el botón) */
 			body.light-mode {
 				--bg-color: #f4f4f4;
 				--text-color: #111111;
-				--accent-color: #cc0000; /* Un rojo un poco más oscuro para que se lea bien en blanco */
+				--accent-color: #cc0000;
 				--card-bg: #ffffff;
 				--card-border: #cccccc;
 				--box-transparent: rgba(255,255,255,0.95);
@@ -40,9 +38,11 @@
 				overflow-x: hidden; 
 				font-family: sans-serif; 
 				transition: background-color 0.3s ease, color 0.3s ease;
+				/* CORRECCIÓN 1: Asegurar que no haya márgenes que creen franjas */
+				height: 100%;
 			}
 
-			/* --- CONTROLES SUPERIORES (Idiomas y Tema) --- */
+			/* --- CONTROLES SUPERIORES --- */
 			.top-controls {
 				position: fixed;
 				top: 20px;
@@ -62,23 +62,37 @@
 				border-radius: 5px;
 				transition: all 0.3s ease;
 				backdrop-filter: blur(5px);
+				/* CORRECCIÓN 3: Centrar texto */
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
 			}
 			.control-btn:hover {
 				background: var(--accent-color);
 				color: var(--btn-hover-text);
 			}
+			/* CORRECCIÓN 3: Evitar que el botón de idioma se quede pegado en rojo */
+			#langBtn:active, #langBtn:focus {
+				background: var(--box-transparent);
+				color: var(--text-color);
+				outline: none; /* Opcional: quitar el contorno de foco por defecto */
+			}
+			/* Mantener el hover normal */
+			#langBtn:hover {
+				background: var(--accent-color);
+				color: var(--btn-hover-text);
+			}
 
-			/* LOGO FLOTANTE (Abajo derecha) */
+
+			/* LOGO FLOTANTE */
 			.floating-logo { position: fixed; bottom: 20px; right: 20px; width: 120px; z-index: 9999; }
 
 			/* SISTEMA DE IDIOMAS */
-			/* Por defecto ocultamos español */
 			.lang-es { display: none; }
-			/* Cuando el body tiene la clase 'es-mode', ocultamos inglés y mostramos español */
 			body.es-mode .lang-en { display: none; }
 			body.es-mode .lang-es { display: inline; }
 			body.es-mode div.lang-es, body.es-mode p.lang-es, body.es-mode h1.lang-es, body.es-mode h2.lang-es, body.es-mode h3.lang-es { display: block; }
-
 
 			/* --- SISTEMA DE SPA (ROUTING) --- */
 			.view { display: none; opacity: 0; transition: opacity 0.5s ease; }
@@ -86,16 +100,34 @@
 			@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 			/* --- HOME --- */
-			#hero-header { position: relative; height: 100vh; width: 100%; display: flex; align-items: center; overflow: hidden; background: #000; }
-			#hero-header video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 1; transform: translate(-50%, -50%); object-fit: cover; }
+			#hero-header { 
+				position: relative; 
+				height: 100vh; /* Ocupa toda la altura */
+				width: 100%; 
+				display: flex; 
+				align-items: center; 
+				overflow: hidden; 
+				background: #000; 
+			}
+			#hero-header video { 
+				position: absolute; 
+				top: 50%; 
+				left: 50%; 
+				min-width: 100%; 
+				min-height: 100%; 
+				width: auto; 
+				height: auto; 
+				z-index: 1; 
+				transform: translate(-50%, -50%); 
+				object-fit: cover; /* CORRECCIÓN 1: Asegura que el video cubra todo sin bordes */
+			}
 			
 			.video-overlay-text { position: relative; z-index: 2; padding-left: 5%; width: 90%; }
-			/* IMPORTANTE: El texto sobre el video siempre debe ser legible, le ponemos sombra extra en modo claro */
 			.video-overlay-text h2 { 
 				color: var(--accent-color) !important; 
 				font-size: clamp(3rem, 12vw, 9.5rem) !important; 
 				line-height: 0.85; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: -2px;
-				text-shadow: 2px 2px 10px rgba(0,0,0,0.5); /* Sombra para que se lea si el video es claro */
+				text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
 			}
 			.video-overlay-text p { 
 				color: var(--accent-color) !important; 
@@ -110,7 +142,7 @@
 				min-height: 80vh; display: flex; align-items: center; border-top: 5px solid var(--accent-color); 
 			}
 			.about-content { 
-				background: var(--box-transparent); /* USA VARIABLE AHORA */
+				background: var(--box-transparent);
 				padding: 50px; margin-left: 5%; max-width: 600px; 
 				border-left: 5px solid var(--accent-color); 
 				transition: background 0.3s ease;
@@ -127,15 +159,28 @@
 			.btn-router:hover { background: var(--accent-color); color: var(--btn-hover-text) !important; }
 
 			.marquee-container { background: var(--accent-color); padding: 15px 0; overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--bg-color); }
-			.marquee-text { display: inline-block; animation: scroll-text 15s linear infinite; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; color: #000; } /* El texto de la marquesina siempre negro */
+			.marquee-text { display: inline-block; animation: scroll-text 15s linear infinite; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; color: #000; }
 			@keyframes scroll-text { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 			.video-section { padding: 80px 5%; background: var(--bg-color); }
-			.video-slider { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--accent-color) var(--bg-color); }
+			/* CORRECCIÓN 4: Aumentar padding lateral para facilitar el deslizamiento en móvil */
+			.video-slider { 
+				display: flex; 
+				gap: 20px; 
+				overflow-x: auto; 
+				padding: 20px 5%; /* Aumentado padding lateral */
+				scrollbar-width: thin; 
+				scrollbar-color: var(--accent-color) var(--bg-color); 
+				/* Opcional: scroll-snap para un deslizamiento más controlado */
+				scroll-snap-type: x mandatory;
+			}
 			.tiktok-card { 
-				min-width: 325px; background: var(--card-bg); 
+				min-width: 300px; /* Ligeramente reducido para dar más espacio */
+				background: var(--card-bg); 
 				border-radius: 12px; border: 1px solid var(--card-border); 
 				padding: 10px; text-align: center; 
+				/* Opcional: scroll-snap-align */
+				scroll-snap-align: center;
 			}
 			.tiktok-card iframe { width: 100%; height: 580px; border-radius: 8px; }
 			.watch-link { display: block; margin-top: 15px; color: var(--accent-color) !important; font-weight: 900; text-decoration: none; font-size: 0.9rem; }
@@ -165,6 +210,12 @@
 				#biography { padding-top: 120px; padding-left: 20px; padding-right: 20px; }
 				.bio-header { font-size: 2.5rem; margin-bottom: 30px; }
 				.top-controls { top: 10px; right: 10px; }
+				/* CORRECCIÓN 2: Asegurar que el título de videos no se cruce en móvil */
+				.video-section h2 {
+					word-wrap: break-word; /* Permite que las palabras largas se rompan */
+					hyphens: auto; /* Añade guiones si es necesario */
+					font-size: 2.5rem !important; /* Reducir un poco el tamaño en móvil si es necesario */
+				}
 			}
 		</style>
 	</head>
@@ -214,8 +265,8 @@
 			</div>
 
 			<section class="video-section">
-				<h2 class="lang-en" style="color: var(--accent-color) !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">LATEST ACTION</h2>
-				<h2 class="lang-es" style="color: var(--accent-color) !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">ÚLTIMA ACCIÓN</h2>
+				<h2 class="lang-en" style="color: var(--accent-color) !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">TIKTOK VIDEOS</h2>
+				<h2 class="lang-es" style="color: var(--accent-color) !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">VIDEOS TIKTOK</h2>
 				
 				<div class="video-slider">
 					<div class="tiktok-card">
@@ -326,7 +377,6 @@
 		</div>
 
 		<script>
-			// 1. LÓGICA DE ROUTING (Navegación)
 			function handleRouting() {
 				const hash = window.location.hash.slice(1) || 'home';
 				document.querySelectorAll('.view').forEach(view => {
@@ -347,12 +397,10 @@
 			window.addEventListener('hashchange', handleRouting);
 			window.addEventListener('load', handleRouting);
 
-			// 2. LÓGICA DE TEMA (Dark/Light)
 			function toggleTheme() {
 				const body = document.body;
 				body.classList.toggle('light-mode');
 				
-				// Cambiar texto del botón
 				const btn = document.getElementById('themeBtn');
 				if (body.classList.contains('light-mode')) {
 					btn.innerHTML = "🌙 DARK";
@@ -361,22 +409,10 @@
 				}
 			}
 
-			// 3. LÓGICA DE IDIOMA (ES/EN)
 			function toggleLang() {
 				const body = document.body;
 				body.classList.toggle('es-mode');
-				
-				// Cambiar texto del botón para indicar qué idioma está activo
-				const btn = document.getElementById('langBtn');
-				// Si está en modo español, no cambiamos el texto del botón, 
-				// el botón siempre dice "ES / EN" para indicar que es un interruptor.
-				// Pero si quieres indicar el actual:
-				/*
-				if (body.classList.contains('es-mode')) {
-					btn.style.fontWeight = "900";
-					btn.style.border = "2px solid #fff";
-				}
-				*/
+				// No es necesario cambiar el texto del botón de idioma, ya es claro.
 			}
 		</script>
 
