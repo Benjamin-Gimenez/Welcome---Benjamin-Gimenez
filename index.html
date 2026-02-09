@@ -7,11 +7,78 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
+			/* =========================================
+			   VARIABLES DE COLORES (Aquí ocurre la magia del Tema)
+			   ========================================= */
+			:root {
+				/* TEMA OSCURO (Por defecto) */
+				--bg-color: #000000;
+				--text-color: #ffffff;
+				--accent-color: #ff0000;
+				--card-bg: #0a0a0a;
+				--card-border: #333333;
+				--box-transparent: rgba(0,0,0,0.9);
+				--btn-hover-text: #000000;
+			}
+
+			/* TEMA CLARO (Se activa con el botón) */
+			body.light-mode {
+				--bg-color: #f4f4f4;
+				--text-color: #111111;
+				--accent-color: #cc0000; /* Un rojo un poco más oscuro para que se lea bien en blanco */
+				--card-bg: #ffffff;
+				--card-border: #cccccc;
+				--box-transparent: rgba(255,255,255,0.95);
+				--btn-hover-text: #ffffff;
+			}
+
 			/* --- ESTILOS GENERALES --- */
-			body, html { margin: 0; padding: 0; background-color: #000 !important; color: #fff; overflow-x: hidden; font-family: sans-serif; }
-			
-			/* LOGO FLOTANTE */
+			body, html { 
+				margin: 0; padding: 0; 
+				background-color: var(--bg-color) !important; 
+				color: var(--text-color); 
+				overflow-x: hidden; 
+				font-family: sans-serif; 
+				transition: background-color 0.3s ease, color 0.3s ease;
+			}
+
+			/* --- CONTROLES SUPERIORES (Idiomas y Tema) --- */
+			.top-controls {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 10000;
+				display: flex;
+				gap: 10px;
+			}
+			.control-btn {
+				background: var(--box-transparent);
+				color: var(--text-color);
+				border: 1px solid var(--accent-color);
+				padding: 8px 15px;
+				cursor: pointer;
+				font-weight: bold;
+				text-transform: uppercase;
+				border-radius: 5px;
+				transition: all 0.3s ease;
+				backdrop-filter: blur(5px);
+			}
+			.control-btn:hover {
+				background: var(--accent-color);
+				color: var(--btn-hover-text);
+			}
+
+			/* LOGO FLOTANTE (Abajo derecha) */
 			.floating-logo { position: fixed; bottom: 20px; right: 20px; width: 120px; z-index: 9999; }
+
+			/* SISTEMA DE IDIOMAS */
+			/* Por defecto ocultamos español */
+			.lang-es { display: none; }
+			/* Cuando el body tiene la clase 'es-mode', ocultamos inglés y mostramos español */
+			body.es-mode .lang-en { display: none; }
+			body.es-mode .lang-es { display: inline; }
+			body.es-mode div.lang-es, body.es-mode p.lang-es, body.es-mode h1.lang-es, body.es-mode h2.lang-es, body.es-mode h3.lang-es { display: block; }
+
 
 			/* --- SISTEMA DE SPA (ROUTING) --- */
 			.view { display: none; opacity: 0; transition: opacity 0.5s ease; }
@@ -21,45 +88,75 @@
 			/* --- HOME --- */
 			#hero-header { position: relative; height: 100vh; width: 100%; display: flex; align-items: center; overflow: hidden; background: #000; }
 			#hero-header video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 1; transform: translate(-50%, -50%); object-fit: cover; }
+			
 			.video-overlay-text { position: relative; z-index: 2; padding-left: 5%; width: 90%; }
-			.video-overlay-text h2 { color: #ff0000 !important; font-size: clamp(3rem, 12vw, 9.5rem) !important; line-height: 0.85; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: -2px; }
-			.video-overlay-text p { color: #ff0000 !important; font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 600; margin-top: 15px; text-transform: uppercase; }
+			/* IMPORTANTE: El texto sobre el video siempre debe ser legible, le ponemos sombra extra en modo claro */
+			.video-overlay-text h2 { 
+				color: var(--accent-color) !important; 
+				font-size: clamp(3rem, 12vw, 9.5rem) !important; 
+				line-height: 0.85; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: -2px;
+				text-shadow: 2px 2px 10px rgba(0,0,0,0.5); /* Sombra para que se lea si el video es claro */
+			}
+			.video-overlay-text p { 
+				color: var(--accent-color) !important; 
+				font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 600; margin-top: 15px; text-transform: uppercase;
+				text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+			}
 
-			.about-section { position: relative; padding: 100px 0; background: url('images/presentacion.jpg') no-repeat center center; background-size: cover !important; min-height: 80vh; display: flex; align-items: center; border-top: 5px solid #ff0000; }
-			.about-content { background: rgba(0,0,0,0.9); padding: 50px; margin-left: 5%; max-width: 600px; border-left: 5px solid #ff0000; }
-			.about-content h2 { color: #fff !important; font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; }
+			.about-section { 
+				position: relative; padding: 100px 0; 
+				background: url('images/presentacion.jpg') no-repeat center center; 
+				background-size: cover !important; 
+				min-height: 80vh; display: flex; align-items: center; border-top: 5px solid var(--accent-color); 
+			}
+			.about-content { 
+				background: var(--box-transparent); /* USA VARIABLE AHORA */
+				padding: 50px; margin-left: 5%; max-width: 600px; 
+				border-left: 5px solid var(--accent-color); 
+				transition: background 0.3s ease;
+			}
+			.about-content h2 { color: var(--text-color) !important; font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; }
 
 			/* BOTONES */
-			.btn-router { display: inline-block; margin-top: 20px; cursor: pointer; padding: 15px 40px; border: 2px solid #ff0000; background: transparent; color: #fff !important; text-decoration: none; font-weight: 900; text-transform: uppercase; font-size: 1rem; transition: all 0.3s ease; }
-			.btn-router:hover { background: #ff0000; color: #000 !important; }
+			.btn-router { 
+				display: inline-block; margin-top: 20px; cursor: pointer; padding: 15px 40px; 
+				border: 2px solid var(--accent-color); background: transparent; 
+				color: var(--text-color) !important; text-decoration: none; 
+				font-weight: 900; text-transform: uppercase; font-size: 1rem; transition: all 0.3s ease; 
+			}
+			.btn-router:hover { background: var(--accent-color); color: var(--btn-hover-text) !important; }
 
-			.marquee-container { background: #ff0000; padding: 15px 0; overflow: hidden; white-space: nowrap; border-bottom: 1px solid #000; }
-			.marquee-text { display: inline-block; animation: scroll-text 15s linear infinite; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; color: #000; }
+			.marquee-container { background: var(--accent-color); padding: 15px 0; overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--bg-color); }
+			.marquee-text { display: inline-block; animation: scroll-text 15s linear infinite; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; color: #000; } /* El texto de la marquesina siempre negro */
 			@keyframes scroll-text { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-			.video-section { padding: 80px 5%; background: #000; }
-			.video-slider { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: #ff0000 #000; }
-			.tiktok-card { min-width: 325px; background: #0a0a0a; border-radius: 12px; border: 1px solid #333; padding: 10px; text-align: center; }
+			.video-section { padding: 80px 5%; background: var(--bg-color); }
+			.video-slider { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--accent-color) var(--bg-color); }
+			.tiktok-card { 
+				min-width: 325px; background: var(--card-bg); 
+				border-radius: 12px; border: 1px solid var(--card-border); 
+				padding: 10px; text-align: center; 
+			}
 			.tiktok-card iframe { width: 100%; height: 580px; border-radius: 8px; }
-			.watch-link { display: block; margin-top: 15px; color: #ff0000 !important; font-weight: 900; text-decoration: none; font-size: 0.9rem; }
+			.watch-link { display: block; margin-top: 15px; color: var(--accent-color) !important; font-weight: 900; text-decoration: none; font-size: 0.9rem; }
 
-			.quote-section { padding: 120px 20px; text-align: center; background: #000; }
-			.quote-section h2 { color: #fff !important; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.1; font-weight: 900; text-transform: uppercase; }
+			.quote-section { padding: 120px 20px; text-align: center; background: var(--bg-color); }
+			.quote-section h2 { color: var(--text-color) !important; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.1; font-weight: 900; text-transform: uppercase; }
 			
-			/* FRASE NUEVA */
-			.mantra-phrase { text-align: center; background: #000; padding: 10px 0 60px 0; }
-			.mantra-phrase h3 { color: #fff; font-size: clamp(1.5rem, 4vw, 3rem); font-weight: 900; text-transform: uppercase; letter-spacing: 5px; margin: 0; }
+			/* FRASE MANTRA */
+			.mantra-phrase { text-align: center; background: var(--bg-color); padding: 10px 0 60px 0; }
+			.mantra-phrase h3 { color: var(--text-color); font-size: clamp(1.5rem, 4vw, 3rem); font-weight: 900; text-transform: uppercase; letter-spacing: 5px; margin: 0; }
 
-			.side-name { color: #ff0000 !important; font-size: clamp(4rem, 15vw, 10rem); font-weight: 900; line-height: 0.8; text-transform: uppercase; padding: 50px 5%; }
-			#footer-new { padding: 80px 5%; background: #000; border-top: 1px solid #333; }
+			.side-name { color: var(--accent-color) !important; font-size: clamp(4rem, 15vw, 10rem); font-weight: 900; line-height: 0.8; text-transform: uppercase; padding: 50px 5%; }
+			#footer-new { padding: 80px 5%; background: var(--bg-color); border-top: 1px solid var(--card-border); }
 			.footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
 			/* --- BIOGRAFÍA --- */
-			#biography { padding-top: 180px; padding-bottom: 100px; padding-left: 10%; padding-right: 10%; min-height: 100vh; background: #000; }
+			#biography { padding-top: 180px; padding-bottom: 100px; padding-left: 10%; padding-right: 10%; min-height: 100vh; background: var(--bg-color); }
 			.bio-container { max-width: 1000px; margin: 0 auto; }
-			.bio-header { font-size: clamp(3rem, 6vw, 6rem); color: #ff0000; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #333; margin-bottom: 50px; padding-bottom: 20px; }
-			.bio-subtitle { font-size: 1.8rem; color: #fff; font-weight: 900; margin-top: 60px; margin-bottom: 20px; border-left: 5px solid #ff0000; padding-left: 20px; text-transform: uppercase; }
-			.bio-paragraph { font-size: 1.3rem; color: #ccc; line-height: 1.8; margin-bottom: 30px; text-align: left; max-width: 900px; }
+			.bio-header { font-size: clamp(3rem, 6vw, 6rem); color: var(--accent-color); font-weight: 900; text-transform: uppercase; border-bottom: 2px solid var(--card-border); margin-bottom: 50px; padding-bottom: 20px; }
+			.bio-subtitle { font-size: 1.8rem; color: var(--text-color); font-weight: 900; margin-top: 60px; margin-bottom: 20px; border-left: 5px solid var(--accent-color); padding-left: 20px; text-transform: uppercase; }
+			.bio-paragraph { font-size: 1.3rem; color: var(--text-color); opacity: 0.8; line-height: 1.8; margin-bottom: 30px; text-align: left; max-width: 900px; }
 
 			@media screen and (max-width: 768px) {
 				.footer-grid { grid-template-columns: 1fr; }
@@ -67,10 +164,16 @@
 				.floating-logo { width: 80px; }
 				#biography { padding-top: 120px; padding-left: 20px; padding-right: 20px; }
 				.bio-header { font-size: 2.5rem; margin-bottom: 30px; }
+				.top-controls { top: 10px; right: 10px; }
 			}
 		</style>
 	</head>
 	<body>
+
+		<div class="top-controls">
+			<button class="control-btn" onclick="toggleTheme()" id="themeBtn">☀️ LIGHT</button>
+			<button class="control-btn" onclick="toggleLang()" id="langBtn">ES / EN</button>
+		</div>
 
 		<img src="images/logo.png" class="floating-logo" alt="Logo">
 
@@ -81,16 +184,26 @@
 					<source src="images/fondo.mp4" type="video/mp4">
 				</video>
 				<div class="video-overlay-text">
-					<h2>Eyes on<br>the goal,<br>mind<br>disciplined.</h2>
-					<p>BENJAMIN GIMENEZ • RACE CAR DRIVER</p>
+					<h2 class="lang-en">Eyes on<br>the goal,<br>mind<br>disciplined.</h2>
+					<h2 class="lang-es">Ojos en<br>la meta,<br>mente<br>disciplinada.</h2>
+					
+					<p class="lang-en">BENJAMIN GIMENEZ • RACE CAR DRIVER</p>
+					<p class="lang-es">BENJAMIN GIMENEZ • PILOTO DE CARRERAS</p>
 				</div>
 			</section>
 
 			<section class="about-section">
 				<div class="about-content">
-					<h2>ABOUT ME</h2>
-					<p>My name is Benjamin Gimenez, a dedicated and ambitious race car driver. At 15 years old, I pursue my dream of becoming a professional driver with passion, sacrifice, and hard work.</p>
-					<a href="#biography" class="btn-router">READ MORE</a>
+					<h2 class="lang-en">ABOUT ME</h2>
+					<h2 class="lang-es">SOBRE MÍ</h2>
+					
+					<p class="lang-en">My name is Benjamin Gimenez, a dedicated and ambitious race car driver. At 15 years old, I pursue my dream of becoming a professional driver with passion, sacrifice, and hard work.</p>
+					<p class="lang-es">Me llamo Benjamín Giménez, un piloto dedicado y ambicioso. A mis 15 años, persigo mi sueño de convertirme en piloto profesional con pasión, sacrificio y trabajo duro.</p>
+					
+					<a href="#biography" class="btn-router">
+						<span class="lang-en">READ MORE</span>
+						<span class="lang-es">LEER MÁS</span>
+					</a>
 				</div>
 			</section>
 
@@ -101,9 +214,10 @@
 			</div>
 
 			<section class="video-section">
-				<h2 style="color: #ff0000 !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">LATEST ACTION</h2>
+				<h2 class="lang-en" style="color: var(--accent-color) !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">LATEST ACTION</h2>
+				<h2 class="lang-es" style="color: var(--accent-color) !important; font-size: 3rem; font-weight: 900; margin-bottom: 30px;">ÚLTIMA ACCIÓN</h2>
+				
 				<div class="video-slider">
-					
 					<div class="tiktok-card">
 						<iframe src="https://www.tiktok.com/embed/7604180174090898696" frameborder="0" allowfullscreen></iframe>
 						<a href="https://www.tiktok.com/@ben.gimenez_ap/video/7604180174090898696" target="_blank" class="watch-link">WATCH ON TIKTOK</a>
@@ -132,16 +246,19 @@
 			</section>
 
 			<section class="quote-section">
-				<h2>"OF ALL THOSE<br>WHO CAME,<br>HE IS THE ONE WHO<br>STANDS OUT THE MOST."</h2>
+				<h2 class="lang-en">"OF ALL THOSE<br>WHO CAME,<br>HE IS THE ONE WHO<br>STANDS OUT THE MOST."</h2>
+				<h2 class="lang-es">"DE TODOS<br>LOS QUE VINIERON,<br>ÉL ES QUIEN MÁS<br>SE DESTACA."</h2>
+				
 				<p style="margin-top:30px;">
-					<a href="https://www.instagram.com/mv_kartracing/" target="_blank" style="color:#ffffff; font-size: 1.2rem; text-decoration: underline;">
+					<a href="https://www.instagram.com/mv_kartracing/" target="_blank" style="color:var(--text-color); font-size: 1.2rem; text-decoration: underline;">
 						Martin Videla - MV Kart Racing
 					</a>
 				</p>
 			</section>
 
 			<div class="mantra-phrase">
-				<h3>FAIL, LEARN, GROW.</h3>
+				<h3 class="lang-en">FAIL, LEARN, GROW.</h3>
+				<h3 class="lang-es">FALLAR, APRENDER, CRECER.</h3>
 			</div>
 
 			<div class="side-name">BENJAMIN<br>GIMENEZ</div>
@@ -149,14 +266,16 @@
 			<footer id="footer-new">
 				<div class="footer-grid">
 					<div>
-						<h3 style="color:#ff0000; font-weight:900;">FOLLOW ME</h3>
+						<h3 style="color:var(--accent-color); font-weight:900;">FOLLOW ME</h3>
 						<p><a href="https://www.instagram.com/ben.gimenez_ap/">Instagram</a></p>
 						<p><a href="https://www.tiktok.com/@ben.gimenez_ap">TikTok</a></p>
 						<p><a href="https://www.facebook.com/profile.php?id=61585290110281">Facebook</a></p>
 						<p><a href="https://www.youtube.com/@ben.gimenez">YouTube</a></p>
 					</div>
 					<div>
-						<h3 style="color:#ff0000; font-weight:900;">CONTACT ME</h3>
+						<h3 class="lang-en" style="color:var(--accent-color); font-weight:900;">CONTACT ME</h3>
+						<h3 class="lang-es" style="color:var(--accent-color); font-weight:900;">CONTACTO</h3>
+						
 						<p>Email: ben.gimenez.contact@gmail.com</p>
 						<p>Phone: +54 11 21862872</p>
 					</div>
@@ -166,28 +285,48 @@
 
 		<div id="biography" class="view">
 			<div class="bio-container">
-				<h1 class="bio-header">BIOGRAPHY</h1>
+				<h1 class="bio-header lang-en">BIOGRAPHY</h1>
+				<h1 class="bio-header lang-es">BIOGRAFÍA</h1>
 				
-				<div class="bio-subtitle">THE BEGINNING</div>
-				<p class="bio-paragraph">
+				<div class="bio-subtitle lang-en">THE BEGINNING</div>
+				<div class="bio-subtitle lang-es">LOS COMIENZOS</div>
+				
+				<p class="bio-paragraph lang-en">
 					My passion for cars began when I was little, when my father would take me in his bus. I started seeing a lot of cars and became interested; today I'm passionate about anything with an internal combustion engine. Soon, I decided to take the plunge and try a go-kart for the first time. I loved it and decided that's what I would do for the rest of my life from that day forward. For me, driving isn't just about speed; it's about discipline, falls, and the drive to improve lap after lap.
 				</p>
+				<p class="bio-paragraph lang-es">
+					Mi pasión por los autos comenzó desde pequeño, cuando mi padre me llevaba en su colectivo. Empecé a ver muchos autos y me interesé; hoy me apasiona cualquier cosa con un motor de combustión interna. Pronto decidí dar el paso y probar un karting por primera vez. Me encantó y decidí que eso es lo que haría por el resto de mi vida desde ese día. Para mí, manejar no es solo velocidad; se trata de disciplina, caídas y el impulso de mejorar vuelta tras vuelta.
+				</p>
 				
-				<div class="bio-subtitle">CURRENT STATUS</div>
-				<p class="bio-paragraph">
+				<div class="bio-subtitle lang-en">CURRENT STATUS</div>
+				<div class="bio-subtitle lang-es">ESTADO ACTUAL</div>
+				
+				<p class="bio-paragraph lang-en">
 					Currently, I'm not competing in any category. But I'm training hard to perfect my technique and improve session after session, preparing to compete in the <strong>"APAK"</strong> category under the <strong>FRAD Metropolitana.</strong>
 				</p>
-
-				<div class="bio-subtitle">THE FUTURE: 2027</div>
-				<p class="bio-paragraph">
-					My eyes are set on the <strong>Super A Category for the 2027 season</strong>. This is the next major step in my career, and my training regimen—both physical and on the simulator—is fully focused on being ready for that challenge.
+				<p class="bio-paragraph lang-es">
+					Actualmente, no estoy compitiendo en ninguna categoría. Pero estoy entrenando duro para perfeccionar mi técnica y mejorar sesión tras sesión, preparándome para competir en la categoría <strong>"APAK"</strong> bajo la <strong>FRAD Metropolitana.</strong>
 				</p>
 
-				<a href="#home" class="btn-router" style="margin-top: 50px;">BACK</a>
+				<div class="bio-subtitle lang-en">THE FUTURE: 2027</div>
+				<div class="bio-subtitle lang-es">EL FUTURO: 2027</div>
+				
+				<p class="bio-paragraph lang-en">
+					My eyes are set on the <strong>Super A Category for the 2027 season</strong>. This is the next major step in my career, and my training regimen—both physical and on the simulator—is fully focused on being ready for that challenge.
+				</p>
+				<p class="bio-paragraph lang-es">
+					Mi mirada está puesta en la <strong>Categoría Super A para la temporada 2027</strong>. Este es el siguiente gran paso en mi carrera, y mi régimen de entrenamiento —tanto físico como en el simulador— está totalmente enfocado en estar listo para ese desafío.
+				</p>
+
+				<a href="#home" class="btn-router" style="margin-top: 50px;">
+					<span class="lang-en">BACK</span>
+					<span class="lang-es">VOLVER</span>
+				</a>
 			</div>
 		</div>
 
 		<script>
+			// 1. LÓGICA DE ROUTING (Navegación)
 			function handleRouting() {
 				const hash = window.location.hash.slice(1) || 'home';
 				document.querySelectorAll('.view').forEach(view => {
@@ -207,6 +346,38 @@
 			}
 			window.addEventListener('hashchange', handleRouting);
 			window.addEventListener('load', handleRouting);
+
+			// 2. LÓGICA DE TEMA (Dark/Light)
+			function toggleTheme() {
+				const body = document.body;
+				body.classList.toggle('light-mode');
+				
+				// Cambiar texto del botón
+				const btn = document.getElementById('themeBtn');
+				if (body.classList.contains('light-mode')) {
+					btn.innerHTML = "🌙 DARK";
+				} else {
+					btn.innerHTML = "☀️ LIGHT";
+				}
+			}
+
+			// 3. LÓGICA DE IDIOMA (ES/EN)
+			function toggleLang() {
+				const body = document.body;
+				body.classList.toggle('es-mode');
+				
+				// Cambiar texto del botón para indicar qué idioma está activo
+				const btn = document.getElementById('langBtn');
+				// Si está en modo español, no cambiamos el texto del botón, 
+				// el botón siempre dice "ES / EN" para indicar que es un interruptor.
+				// Pero si quieres indicar el actual:
+				/*
+				if (body.classList.contains('es-mode')) {
+					btn.style.fontWeight = "900";
+					btn.style.border = "2px solid #fff";
+				}
+				*/
+			}
 		</script>
 
 	</body>
